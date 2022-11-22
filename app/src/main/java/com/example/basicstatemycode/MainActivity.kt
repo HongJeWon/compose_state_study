@@ -3,8 +3,10 @@ package com.example.basicstatemycode
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -34,10 +36,15 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun WaterCounter(modifier: Modifier = Modifier) {
     val count = 0
-    Text(
-        text = "you've had $count glasses",
-        modifier = modifier.padding(16.dp)
-    )
+    Column {
+        Text(
+            text = "you've had $count glasses",
+            modifier = modifier.padding(16.dp)
+        )
+        Button(onClick = {}, modifier = Modifier.padding(top = 8.dp)) {
+            Text(text = "Add one")
+        }
+    }
 
 }
 
