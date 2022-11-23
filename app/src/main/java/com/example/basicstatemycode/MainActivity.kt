@@ -4,19 +4,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.basicstatemycode.data.WellnessTaskList
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.basicstatemycode.data.WellnessTasksList
+import com.example.basicstatemycode.data.WellnessViewModel
+import com.example.basicstatemycode.data.getWellnessTasks
 import com.example.basicstatemycode.ui.theme.BasicStateMyCodeTheme
 
 class MainActivity : ComponentActivity() {
@@ -89,10 +90,23 @@ fun WaterCounter(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun WellnessScreen(modifier: Modifier = Modifier) {
-    Column {
+fun WellnessScreen(
+    modifier: Modifier = Modifier,
+    wellnessViewModel: WellnessViewModel = viewModel()
+) {
+
+    Column(modifier = modifier) {
         StatefulCounter()
-        WellnessTaskList()
+        WellnessTasksList(
+            list = wellnessViewModel.tasks,
+            onCheckedTask = { wellnessTask, checked ->
+                wellnessViewModel.changeTaskChecked(
+                    wellnessTask,
+                    checked
+                )
+            },
+            onCloseTask = { wellnessTask -> wellnessViewModel.remove(wellnessTask) }
+        )
     }
 
 }

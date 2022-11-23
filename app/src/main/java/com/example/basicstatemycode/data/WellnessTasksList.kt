@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-private fun getWellnessTasks() = List(30) { i ->
+fun getWellnessTasks() = List(30) { i ->
     WellnessTask(
         i,
         "Task # $i"
@@ -24,15 +24,25 @@ private fun getWellnessTasks() = List(30) { i ->
 }
 
 @Composable
-fun WellnessTaskList(
+fun WellnessTasksList(
+    list: List<WellnessTask>,
+    onCheckedTask: (WellnessTask, Boolean) -> Unit,
+    onCloseTask: (WellnessTask) -> Unit,
     modifier: Modifier = Modifier,
-    list: List<WellnessTask> = remember {
-        getWellnessTasks()
-    }
 ) {
     LazyColumn(modifier = modifier) {
         items(list) { task ->
-            WellnessTaskItem(taskName = task.label)
+            WellnessTaskItem(
+                taskName = task.label,
+                checked = task.checked.value,
+                onCheckedChange = { checked ->
+                    onCheckedTask(
+                        task,
+                        checked
+                    )
+                },
+                onClose = { onCloseTask(task) }
+            )
         }
     }
 }
@@ -41,6 +51,8 @@ fun WellnessTaskList(
 @Composable
 fun WellnessTaskItem(
     taskName: String,
+    checked: Boolean,
+    onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var checkedState by rememberSaveable {
@@ -48,12 +60,12 @@ fun WellnessTaskItem(
     }
     WellnessTaskItem(
         taskName = taskName,
-        checked = checkedState,
+        checked = checked,
         onCheckedChange = { newValue ->
             checkedState =
                 newValue
         },
-        onClose = { /*TODO*/ },
+        onClose = onClose,
         modifier = modifier
     )
 
